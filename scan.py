@@ -196,6 +196,8 @@ def sns_scan_results(
         AV_STATUS_METADATA: scan_result,
         AV_TIMESTAMP_METADATA: get_timestamp(),
     }
+
+    print("publishing " + str(message) + " to " + sns_arn)
     sns_client.publish(
         Subject=f"{scan_result} File found in S3 Bucket!",
         TargetArn=sns_arn,
