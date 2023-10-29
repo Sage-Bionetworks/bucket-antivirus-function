@@ -33,6 +33,7 @@ RUN /usr/local/bin/pip3.11 install -r requirements.txt
 RUN rm -rf /root/.cache/pip
 
 # Download libraries we need to run in lambda
+WORKDIR /tmp
 RUN yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls libtasn1 lib64nettle nettle
 RUN rpm2cpio clamav-0*.rpm | cpio -idmv
 RUN rpm2cpio clamav-lib*.rpm | cpio -idmv
