@@ -45,6 +45,7 @@ RUN rpm2cpio nettle* | cpio -idmv
 RUN rpm2cpio lib* | cpio -idmv
 RUN rpm2cpio *.rpm | cpio -idmv
 RUN rpm2cpio libtasn1* | cpio -idmv
+RUN yum install -y libtool-ltdl
 
 # Copy over the binaries and libraries
 RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
