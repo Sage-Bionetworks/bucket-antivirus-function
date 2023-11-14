@@ -35,6 +35,7 @@ from common import AV_STATUS_INFECTED
 from common import CLAMAVLIB_PATH
 from common import CLAMSCAN_PATH
 from common import FRESHCLAM_PATH
+from common import LD_PATH
 from common import create_dir
 
 
@@ -42,7 +43,7 @@ RE_SEARCH_DIR = r"SEARCH_DIR\(\"=([A-z0-9\/\-_]*)\"\)"
 
 
 def current_library_search_path():
-    ld_verbose = subprocess.check_output(["ld.gold", "--verbose"]).decode("utf-8")
+    ld_verbose = subprocess.check_output([LD_PATH, "--verbose"]).decode("utf-8")
     rd_ld = re.compile(RE_SEARCH_DIR)
     return rd_ld.findall(ld_verbose)
 
