@@ -38,7 +38,7 @@ RUN rpm2cpio xz-libs* | cpio -idmv
 RUN rpm2cpio binutils* | cpio -idmv
 
 # Copy over the binaries and libraries
-RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/bin/ld.gold /tmp/usr/lib64/* /opt/app/bin/
+RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/bin/ld.bfd /tmp/usr/lib64/* /opt/app/bin/
 
 # Fix the freshclam.conf settings
 RUN echo "DatabaseMirror database.clamav.net" > /opt/app/bin/freshclam.conf
