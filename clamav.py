@@ -43,9 +43,9 @@ RE_SEARCH_DIR = r"SEARCH_DIR\(\"=([A-z0-9\/\-_]*)\"\)"
 
 
 def current_library_search_path():
-    ld_verbose = subprocess.check_output([LD_PATH, "--verbose"]).decode("utf-8")
-    rd_ld = re.compile(RE_SEARCH_DIR)
-    return rd_ld.findall(ld_verbose)
+    # Hardcode the output of ld -verbose that was searched for
+    lib_paths = ["/lib64", "/usr/lib64", "/usr/local/lib64", "/lib", "/usr/lib", "/usr/local/lib"]
+    return lib_paths
 
 
 def update_defs_from_s3(s3_client, bucket, prefix):
