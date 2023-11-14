@@ -5,19 +5,6 @@ RUN yum update -y
 RUN yum install -y cpio yum-utils zip unzip less binutils
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-# Install Python 3.11
-# RUN yum groupinstall -y "Development Tools"
-# RUN yum install -y libffi-devel bzip2-devel
-# RUN yum remove -y openssl-devel
-# RUN yum install -y openssl11-devel wget
-
-# WORKDIR /tmp
-# RUN wget https://python.org/ftp/python/3.11.1/Python-3.11.1.tgz
-# RUN tar xzf Python-3.11.1.tgz 
-# WORKDIR /tmp/Python-3.11.1
-# RUN ./configure --enable-optimizations
-# RUN make altinstall
-
 # Set up working directories
 RUN mkdir -p /opt/app
 RUN mkdir -p /opt/app/build
