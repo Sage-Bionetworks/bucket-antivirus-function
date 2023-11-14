@@ -1,4 +1,4 @@
-FROM amazonlinux:2
+FROM public.ecr.aws/lambda/python:3.11
 
 # Install packages
 RUN yum update -y
@@ -6,17 +6,17 @@ RUN yum install -y cpio yum-utils zip unzip less
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 # Install Python 3.11
-RUN yum groupinstall -y "Development Tools"
-RUN yum install -y libffi-devel bzip2-devel
-RUN yum remove -y openssl-devel
-RUN yum install -y openssl11-devel wget
+# RUN yum groupinstall -y "Development Tools"
+# RUN yum install -y libffi-devel bzip2-devel
+# RUN yum remove -y openssl-devel
+# RUN yum install -y openssl11-devel wget
 
-WORKDIR /tmp
-RUN wget https://python.org/ftp/python/3.11.1/Python-3.11.1.tgz
-RUN tar xzf Python-3.11.1.tgz 
-WORKDIR /tmp/Python-3.11.1
-RUN ./configure --enable-optimizations
-RUN make altinstall
+# WORKDIR /tmp
+# RUN wget https://python.org/ftp/python/3.11.1/Python-3.11.1.tgz
+# RUN tar xzf Python-3.11.1.tgz 
+# WORKDIR /tmp/Python-3.11.1
+# RUN ./configure --enable-optimizations
+# RUN make altinstall
 
 # Set up working directories
 RUN mkdir -p /opt/app
@@ -29,12 +29,12 @@ COPY ./*.py /opt/app/
 COPY requirements.txt /opt/app/requirements.txt
 
 # This had --no-cache-dir, tracing through multiple tickets led to a problem in wheel
-RUN /usr/local/bin/pip3.11 install -r requirements.txt
+RUN pip3 install -r requirements.txt
 RUN rm -rf /root/.cache/pip
 
 # Download libraries we need to run in lambda
 WORKDIR /tmp
-RUN yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls libtasn1 lib64nettle nettle libtool-ltdl libxml2
+RUN yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls libtasn1 lib64nettle nettle libtool-ltdl libxml2 liblzma
 RUN rpm2cpio clamav-0*.rpm | cpio -idmv
 RUN rpm2cpio clamav-lib*.rpm | cpio -idmv
 RUN rpm2cpio clamav-update*.rpm | cpio -idmv
@@ -59,7 +59,7 @@ RUN echo "CompressLocalDatabase yes" >> /opt/app/bin/freshclam.conf
 WORKDIR /opt/app
 RUN zip -r9 --exclude="*test*" /opt/app/build/lambda.zip *.py bin
 
-WORKDIR /usr/local/lib/python3.11/site-packages
+WORKDIR /var/lang/lib/python3.11/site-packages
 RUN zip -r9 /opt/app/build/lambda.zip *
 
 WORKDIR /opt/app
