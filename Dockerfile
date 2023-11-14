@@ -2,7 +2,7 @@ FROM public.ecr.aws/lambda/python:3.11
 
 # Install packages
 RUN yum update -y
-RUN yum install -y cpio yum-utils zip unzip less binutils
+RUN yum install -y cpio yum-utils zip unzip less
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 # Set up working directories
@@ -21,7 +21,7 @@ RUN rm -rf /root/.cache/pip
 
 # Download libraries we need to run in lambda
 WORKDIR /tmp
-RUN yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls libtasn1 lib64nettle nettle libtool-ltdl libxml2 xz-libs
+RUN yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls libtasn1 lib64nettle nettle libtool-ltdl libxml2 xz-libs binutils
 RUN rpm2cpio clamav-0*.rpm | cpio -idmv
 RUN rpm2cpio clamav-lib*.rpm | cpio -idmv
 RUN rpm2cpio clamav-update*.rpm | cpio -idmv
@@ -35,9 +35,10 @@ RUN rpm2cpio libtasn1* | cpio -idmv
 RUN rpm2cpio libtool* | cpio -idmv
 RUN rpm2cpio libxml* | cpio -idmv
 RUN rpm2cpio xz-libs* | cpio -idmv
+RUN rpm2cpio binutils* | cpio -idmv
 
 # Copy over the binaries and libraries
-RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
+RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/bin/ld.gold /tmp/usr/lib64/* /opt/app/bin/
 
 # Fix the freshclam.conf settings
 RUN echo "DatabaseMirror database.clamav.net" > /opt/app/bin/freshclam.conf
