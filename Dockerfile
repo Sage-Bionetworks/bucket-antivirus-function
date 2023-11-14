@@ -2,7 +2,7 @@ FROM public.ecr.aws/lambda/python:3.11
 
 # Install packages
 RUN yum update -y
-RUN yum install -y cpio yum-utils zip unzip less
+RUN yum install -y cpio yum-utils zip unzip less binutils
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 # Install Python 3.11
