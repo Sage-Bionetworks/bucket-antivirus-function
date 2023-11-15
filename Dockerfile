@@ -40,7 +40,7 @@ RUN rpm2cpio libidn2* | cpio -idmv
 RUN rpm2cpio libssh2* | cpio -idmv
 RUN rpm2cpio openldap-2* | cpio -idmv
 RUN rpm2cpio libunistring* | cpio -idmv
-RUN rpm2cpio cyrus-sasl-lib-2.1.26-24.amzn2.x86_64.rpm | cpio -idmv
+#RUN rpm2cpio cyrus-sasl-lib-2.1.26-24.amzn2.x86_64.rpm | cpio -idmv
 
 # Copy over the binaries and libraries
 RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
