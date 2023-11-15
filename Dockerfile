@@ -29,8 +29,6 @@ RUN rpm2cpio json-c*.rpm | cpio -idmv
 RUN rpm2cpio pcre*.rpm | cpio -idmv
 RUN rpm2cpio gnutls* | cpio -idmv
 RUN rpm2cpio nettle* | cpio -idmv
-RUN rpm2cpio lib* | cpio -idmv
-RUN rpm2cpio *.rpm | cpio -idmv
 RUN rpm2cpio libtasn1* | cpio -idmv
 RUN rpm2cpio libtool* | cpio -idmv
 RUN rpm2cpio libxml* | cpio -idmv
