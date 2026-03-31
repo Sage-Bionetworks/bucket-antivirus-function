@@ -1,0 +1,35 @@
+---
+name: build synapse virus scanner
+
+# New build every day around 6:00am, this ensures that even though we didn't change the lambda code 
+# the artifact is rebuilt so that we use the latest clam-av binary dependency
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  build-synapse-virus-scanner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Virus Scanner
+        run: |
+          GIT_COMMIT=${{ github.sha }}
+          BUILD_VERSION=$(date '+%Y%m%d')-${GIT_COMMIT:0:7}
+          BUILD_FILE=virus-scanner-lambda-$BUILD_VERSION.zip
+          JFROG_URL=https://sagebionetworks.jfrog.io/artifactory/lambda-artifacts/org/sagebionetworks/virus-scanner
+
+          # Build archive
+          IMAGE_TAG=bucket-antivirus-function:latest
+          MOUNTED_VOLUME=$(pwd)/build
+          docker build -t $IMAGE_TAG .
+          mkdir -p $MOUNTED_VOLUME
+          docker run -v $MOUNTED_VOLUME:/opt/mount --rm --entrypoint cp $IMAGE_TAG /opt/app/build/lambda.zip /opt/mount/$BUILD_FILE
+
+          # Upload to JFrog
+          # JFROG_CREDS must be a colon separated user name and password (USER:PASS)
+          curl -u ${{ secrets.JFROG_CREDS }} -T $MOUNTED_VOLUME/$BUILD_FILE $JFROG_URL/$BUILD_FILE
+...

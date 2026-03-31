@@ -1,9 +1,8 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/python:3.12
 
 # Install packages
-RUN yum update -y
-RUN yum install -y cpio yum-utils zip unzip less wget
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN dnf update -y
+RUN dnf install -y cpio zip unzip less wget
 
 # Set up working directories
 RUN mkdir -p /opt/app
@@ -35,7 +34,7 @@ RUN echo "CompressLocalDatabase yes" >> /opt/app/bin/freshclam.conf
 WORKDIR /opt/app
 RUN zip -r9 --exclude="*test*" /opt/app/build/lambda.zip *.py bin
 
-WORKDIR /var/lang/lib/python3.11/site-packages
+WORKDIR /var/lang/lib/python3.12/site-packages
 RUN zip -r9 /opt/app/build/lambda.zip *
 
 WORKDIR /opt/app
